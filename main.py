@@ -10,8 +10,6 @@ def main():
 
     while True:
         user.handle_transaction()
-        user.add_category()
-
         continue_choice = input("Do you want to perform another transaction? (Y/N) \n").strip().lower()
         if continue_choice != 'y':
             print("Goodbye!")

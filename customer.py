@@ -1,16 +1,16 @@
 from datetime import datetime
 
 class User:
+    spend_categories = ["Food", "Transportation", "Entertainment", "Shopping", "Health", "Education", "Utilities", "Travel", "Housing", "Other"]
+    receive_categories = ["Salary", "Investment", "Gift", "Business", "Allowance", "Bonus", "Loan", "Savings", "Pension", "Other"]
+    users = []
+
     def __init__(self, username, is_new_user):
         self.username = username
         self.is_new_user = is_new_user
         self.current_money = 0
-        self.spend_categories = []
         self.spend_money_day = []
-        self.receive_categories = []
         self.receive_money_day = []
-        
-        
 
     def welcome_user(self):
         if self.is_new_user:
@@ -32,19 +32,15 @@ class User:
 
     def handle_transaction(self):
         while True:
-            user_message = input("Receive or Spent? (R/S) \n").strip().lower()
-            try:
-                if user_message == 'r':
-                    self.receive_money()
-                    self.time_receive_money()
-                    self.add_receive_category()
-                elif user_message == 's':
-                    self.spend_money()
-                    self.time_spent_money()
-                    self.add_spent_category()
+            user_message = input("Receive or Spend? (R/S) \n").strip().lower()
+            if user_message == 'r':
+                self.receive_money()
                 break
-            except ValueError:
-                print("Invalid input. Please try again.\n")
+            elif user_message == 's':
+                self.spend_money()
+                break
+            else:
+                print("Invalid input. Please enter 'R' for Receive or 'S' for Spend.\n")
 
     def receive_money(self):
         while True:
@@ -52,30 +48,30 @@ class User:
                 add_money = int(input("How much money do you receive? \n"))
                 self.current_money += add_money
                 print(f"Now, your current money is: {self.current_money}")
+                self.time_receive_money()
+                self.choose_category("receive")
                 break
-            #print("You received more money at: ", datetime.now().strftime('%Y/%m/%d %H:%M:%S'))
             except ValueError:
                 print("Invalid input. Please enter a valid number.")
-    
+
     def time_receive_money(self):
         while True:
-            try:
-                time_receive_choice = input("When do you receive this money? Today or another day ? (T/A) \n").strip().lower()
-                if time_receive_choice == "t":
-                    receive_today = datetime.now().strftime('%Y/%m/%d')
-                    self.receive_money_day.append(receive_today)
-                    print("You received more money at: ", receive_today)
-                    print("Your date list of transtractions: ",self.receive_money_day)
-                elif time_receive_choice == "a":
+            time_receive_choice = input("When do you receive this money? Today or another day ? (T/A) \n").strip().lower()
+            if time_receive_choice == "t":
+                receive_today = datetime.now().strftime('%Y/%m/%d')
+                self.receive_money_day.append(receive_today)
+                break
+            elif time_receive_choice == "a":
+                try:
                     string_receive_anotherday = input("Enter the day you receive the money (DD/MM/YYYY): \n")
                     receive_anotherday = datetime.strptime(string_receive_anotherday, '%d/%m/%Y')
                     self.receive_money_day.append(receive_anotherday.strftime('%Y/%m/%d'))
-                    print("You received more money at: ", receive_anotherday)
-                    print("Your date list of transtractions: ",self.receive_money_day)
-                break
-            except ValueError:
-                print("Invalid input. Please try again.\n")
-    
+                    break
+                except ValueError:
+                    print("Invalid date format. Please enter the date as DD/MM/YYYY.")
+            else:
+                print("Invalid choice. Please enter 'T' for today or 'A' for another day.\n")
+
 
     def spend_money(self):
         while True:
@@ -86,38 +82,63 @@ class User:
                 else:
                     self.current_money -= spent_money
                     print(f"Now, your current money is: {self.current_money}")
+                    self.time_spent_money()
+                    self.choose_category("spend")
                     break
             except ValueError:
                 print("Invalid input. Please enter a valid number.")
-    
+
     def time_spent_money(self):
         while True:
-            try:
-                time_spent_choice = input("When do you spend this money? Today or another day ? (T/A) \n").strip().lower()
-                if time_spent_choice == "t":
-                    spent_today = datetime.now().strftime('%Y/%m/%d')
-                    self.spend_money_day.append(spent_today)
-                    print("You spent money at: ", spent_today)
-                    print("Your date list of transtractions: ",self.spend_money_day)
-                elif time_spent_choice == "a":
-                    string_spent_anotherday = input("Enter the day you spend the money (DD/MM/YYYY): \n")
+            time_spent_choice = input("When do you spend this money? Today or another day? (T/A) ").strip().lower()
+            if time_spent_choice == "t":
+                spent_today = datetime.now().strftime('%Y/%m/%d')
+                self.spend_money_day.append(spent_today)
+                break
+            elif time_spent_choice == "a":
+                try:
+                    string_spent_anotherday = input("Enter the day you spend the money (DD/MM/YYYY): ")
                     spent_anotherday = datetime.strptime(string_spent_anotherday, '%d/%m/%Y')
                     self.spend_money_day.append(spent_anotherday.strftime('%Y/%m/%d'))
-                    print(f"You spent money at:{spent_anotherday}")
-                    print("Your date list of transtractions: ",self.spend_money_day)
-                break
-            except ValueError:
-                print("Invalid input. Please try again.\n")
+                    break
+                except ValueError:
+                    print("Invalid date! Please ensure the format is DD/MM/YYYY.")
+                    print("Remember, February 29 is only valid in leap years (e.g., 2024, 2028).")
+            else:
+                print("Invalid choice. Please enter 'T' for today or 'A' for another day.\n")
 
 
-    def add_receive_category(self):
-        receive_category = input("What category is this transaction? (Salary, Allowance, Gift, etc.): \n").strip().lower()
-        if receive_category.capitalize() not in self.receive_categories:
-            self.receive_categories.append(receive_category.capitalize())
-        print("Your current categories: ", self.receive_categories)
+    def choose_category(self, transaction_type):
+        if transaction_type == "receive":
+            print("Choose a category for this receipt:")
+            for i, category in enumerate(User.receive_categories, 1):
+                print(f"{i}. {category}")
+            while True:
+                try:
+                    choice = int(input("Enter the number corresponding to the category: \n"))
+                    if 1 <= choice <= len(User.receive_categories):
+                        print(f"Transaction categorized as: {User.receive_categories[choice - 1]}")
+                        break
+                    else:
+                        print("Invalid choice. Please select a valid category.")
+                except ValueError:
+                    print("Invalid input. Please enter a number.")
+        elif transaction_type == "spend":
+            print("Choose a category for this spending:")
+            for i, category in enumerate(User.spend_categories, 1):
+                print(f"{i}. {category}")
+            while True:
+                try:
+                    choice = int(input("Enter the number corresponding to the category: \n"))
+                    if 1 <= choice <= len(User.spend_categories):
+                        print(f"Transaction categorized as: {User.spend_categories[choice - 1]}")
+                        break
+                    else:
+                        print("Invalid choice. Please select a valid category.")
+                except ValueError:
+                    print("Invalid input. Please enter a number.")
 
-    def add_spent_category(self):
-        spent_category = input("What category is this transaction? (Food, Entertainment, Transportation, etc.): \n").strip().lower()
-        if spent_category.capitalize() not in self.spend_categories:
-            self.spend_categories.append(spent_category.capitalize())
-        print("Your current categories: ", self.spend_categories)
+    @classmethod
+    def add_user(cls, user):
+        cls.users.append(user)
+

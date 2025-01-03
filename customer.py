@@ -117,7 +117,13 @@ class User:
                 try:
                     choice = int(input("Enter the number corresponding to the category: \n"))
                     if 1 <= choice <= len(User.receive_categories):
-                        print(f"Transaction categorized as: {User.receive_categories[choice - 1]}")
+                        selected_category = User.receive_categories[choice - 1]
+                        if choice == 10:
+                            print("You have chosen the 'Other' category. Please enter the category name:")
+                            category_name = input()
+                            print(f"Transaction categorized as: {category_name}")
+                        else:
+                            print(f"Transaction categorized as: {selected_category}")
                         break
                     else:
                         print("Invalid choice. Please select a valid category.")
@@ -131,7 +137,13 @@ class User:
                 try:
                     choice = int(input("Enter the number corresponding to the category: \n"))
                     if 1 <= choice <= len(User.spend_categories):
-                        print(f"Transaction categorized as: {User.spend_categories[choice - 1]}")
+                        selected_category = User.spend_categories[choice - 1]
+                        if choice == 10:
+                            print("You have chosen the 'Other' category. Please enter the category name:")
+                            category_name = input()
+                            print(f"Transaction categorized as: {category_name}")
+                        else:
+                            print(f"Transaction categorized as: {selected_category}")
                         break
                     else:
                         print("Invalid choice. Please select a valid category.")

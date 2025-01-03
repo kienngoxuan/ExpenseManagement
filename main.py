@@ -2,9 +2,18 @@ from customer import User
 
 def main():
     username = input("What's your username: \n").strip()
-    is_new_user = input("Are you a new user? (Y/N) \n").strip().lower() == 'y'
 
-    user = User(username, is_new_user)
+    while True:
+        is_new_user_input = input("Are you a new user? (Y/N) \n").strip().lower()
+        if is_new_user_input in ['y', 'n']:
+            is_new_user = is_new_user_input == 'y'
+            break
+        else:
+            print("Invalid choice. Please enter 'Y' for Yes or 'N' for No.")
+
+    is_old_user = not is_new_user
+
+    user = User(username, is_new_user, is_old_user)
     User.add_user(user)
     user.welcome_user()
     user.set_current_money()
@@ -15,6 +24,7 @@ def main():
         if continue_choice != 'y':
             print("Goodbye!")
             break
+
 
 if __name__ == "__main__":
     main()

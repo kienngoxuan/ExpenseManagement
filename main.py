@@ -1,8 +1,7 @@
 from customer import User
+from database import *
 
 def main():
-    username = input("What's your username: \n").strip()
-
     while True:
         is_new_user_input = input("Are you a new user? (Y/N) \n").strip().lower()
         if is_new_user_input in ['y', 'n']:
@@ -27,4 +26,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+ username = input("What's your username: \n").strip() 
+ password = input("What's your password: \n").strip()
+ balance = float(input("enter balance: "))
+ store_user_in_database(username,password,balance)

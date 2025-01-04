@@ -1,5 +1,4 @@
 from datetime import datetime
-
 class User:
     spend_categories = ["Food", "Transportation", "Entertainment", "Shopping", "Health", "Education", "Utilities", "Travel", "Housing", "Other"]
     receive_categories = ["Salary", "Investment", "Gift", "Business", "Allowance", "Bonus", "Loan", "Savings", "Pension", "Other"]
@@ -161,4 +160,3 @@ class User:
     @classmethod
     def add_user(cls, user):
         cls.users.append(user)
-
